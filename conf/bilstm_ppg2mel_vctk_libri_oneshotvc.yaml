@@ -1,0 +1,36 @@
+data:
+  train_fid_list: "/home/shaunxliu/data/vctk/fidlists/train_fidlist.new"
+  dev_fid_list: "/home/shaunxliu/data/vctk/fidlists/dev_fidlist.new"
+  eval_fid_list: "/home/shaunxliu/data/vctk/fidlists/eval_fidlist.txt"
+  vctk_ppg_dir: "/home/shaunxliu/data/vctk/conformer_bnf10ms"
+  libri_ppg_dir: "/home/shaunxliu/data/LibriTTS/conformer_bnf10ms"
+  vctk_f0_dir: "/home/shaunxliu/data/vctk/merged_f0s"
+  libri_f0_dir: "/home/shaunxliu/data/LibriTTS/f0s"
+  vctk_wav_dir: "/home/shaunxliu/data/vctk/wav_mono_24k_16b_norm-6db"
+  libri_wav_dir: "/home/shaunxliu/data/LibriTTS/LibriTTS/train-wavs-clean460/"
+  vctk_spk_dvec_dir: "/home/shaunxliu/data/vctk/GE2E_spkEmbed_step_5805000_perSpk"
+  libri_spk_dvec_dir: "/home/shaunxliu/data/LibriTTS/GE2E_spkEmbed_step_5805000_perSpk"
+  ppg_file_ext: "ling_feat.npy"
+  f0_file_ext: "f0.npy"
+  wav_file_ext: "wav"
+  min_max_norm_mel: true
+  mel_min: -12.0
+  mel_max: 2.5 
+
+hparas:
+  batch_size: 32
+  valid_step: 1000
+  max_step: 1000000
+  optimizer: 'Adam'
+  lr: 0.001
+  eps: 1.0e-8
+  weight_decay: 1.0e-6
+  lr_scheduler: 'warmup'   # "fixed", "warmup"
+
+model_name: "bilstm"
+model:
+  input_size: 146    # 144 ppg-dim and 2 pitch 
+  multi_spk: True
+  use_spk_dvec: True  # for one-shot VC
+  
+  

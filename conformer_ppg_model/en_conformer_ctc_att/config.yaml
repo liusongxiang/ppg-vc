@@ -1,0 +1,238 @@
+config: ./conf/train_asr_conformer_nodownsample.v1.yaml
+print_config: false
+log_level: INFO
+dry_run: false
+iterator_type: sequence
+output_dir: exp/asr_train_asr_conformer_nodownsample.v1_raw_sp
+ngpu: 1
+seed: 0
+num_workers: 1
+num_att_plot: 5
+dist_backend: nccl
+dist_init_method: env://
+dist_world_size: 4
+dist_rank: 1
+local_rank: 1
+dist_master_addr: localhost
+dist_master_port: 50826
+dist_launcher: null
+multiprocessing_distributed: true
+cudnn_enabled: true
+cudnn_benchmark: false
+cudnn_deterministic: true
+collect_stats: false
+write_collected_feats: false
+max_epoch: 2000
+patience: 200
+val_scheduler_criterion:
+- valid
+- acc
+early_stopping_criterion:
+- valid
+- loss
+- min
+best_model_criterion:
+-   - valid
+    - acc
+    - max
+keep_nbest_models: 10
+grad_clip: 5.0
+grad_noise: false
+accum_grad: 8
+no_forward_run: false
+resume: true
+train_dtype: float32
+log_interval: null
+pretrain_path: []
+pretrain_key: []
+num_iters_per_epoch: null
+batch_size: 32
+valid_batch_size: 32
+batch_bins: 1000000
+valid_batch_bins: 1000000
+train_shape_file:
+- exp/asr_stats_raw_sp/train/speech_shape
+- exp/asr_stats_raw_sp/train/text_shape.phn
+valid_shape_file:
+- exp/asr_stats_raw_sp/valid/speech_shape
+- exp/asr_stats_raw_sp/valid/text_shape.phn
+batch_type: folded
+valid_batch_type: folded
+fold_length:
+- 128000
+- 150
+sort_in_batch: descending
+sort_batch: descending
+chunk_length: 500
+chunk_shift_ratio: 0.5
+num_cache_chunks: 1024
+train_data_path_and_name_and_type:
+-   - dump/raw/train_960_sp/wav.scp
+    - speech
+    - sound
+-   - dump/raw/train_960_sp/text
+    - text
+    - text
+valid_data_path_and_name_and_type:
+-   - dump/raw/dev_set/wav.scp
+    - speech
+    - sound
+-   - dump/raw/dev_set/text
+    - text
+    - text
+allow_variable_data_keys: false
+max_cache_size: 0.0
+valid_max_cache_size: 0.0
+optim: adam
+optim_conf:
+    lr: 0.0015
+scheduler: warmuplr
+scheduler_conf:
+    warmup_steps: 25000
+token_list:
+- <blank>
+- <unk>
+- AA0
+- AA1
+- AA2
+- AE0
+- AE1
+- AE2
+- AH0
+- AH1
+- AH2
+- AO0
+- AO1
+- AO2
+- AW0
+- AW1
+- AW2
+- AY0
+- AY1
+- AY2
+- B
+- CH
+- D
+- DH
+- EH0
+- EH1
+- EH2
+- ER0
+- ER1
+- ER2
+- EY0
+- EY1
+- EY2
+- F
+- G
+- HH
+- IH0
+- IH1
+- IH2
+- IY0
+- IY1
+- IY2
+- JH
+- K
+- L
+- M
+- N
+- NG
+- OW0
+- OW1
+- OW2
+- OY0
+- OY1
+- OY2
+- P
+- R
+- S
+- SH
+- T
+- TH
+- UH0
+- UH1
+- UH2
+- UW0
+- UW1
+- UW2
+- V
+- W
+- Y
+- Z
+- ZH
+- sil
+- sp
+- spn
+- <sos/eos>
+init: null
+input_size: null
+ctc_conf:
+    dropout_rate: 0.0
+    ctc_type: builtin
+    reduce: true
+model_conf:
+    ctc_weight: 0.5
+    lsm_weight: 0.1
+    length_normalized_loss: false
+use_preprocessor: true
+token_type: phn
+bpemodel: null
+non_linguistic_symbols: null
+frontend: default
+frontend_conf:
+    fs: 16000
+specaug: specaug
+specaug_conf:
+    apply_time_warp: true
+    time_warp_window: 5
+    time_warp_mode: bicubic
+    apply_freq_mask: true
+    freq_mask_width_range:
+    - 0
+    - 30
+    num_freq_mask: 2
+    apply_time_mask: true
+    time_mask_width_range:
+    - 0
+    - 40
+    num_time_mask: 2
+normalize: utterance_mvn
+normalize_conf:
+    norm_means: true
+    norm_vars: true
+encoder: conformer
+encoder_conf:
+    attention_dim: 144
+    attention_heads: 4
+    linear_units: 576
+    num_blocks: 16
+    dropout_rate: 0.1
+    positional_dropout_rate: 0.1
+    attention_dropout_rate: 0.0
+    input_layer: conv2d
+    normalize_before: true
+    concat_after: false
+    positionwise_layer_type: linear
+    positionwise_conv_kernel_size: 1
+    macaron_style: true
+    pos_enc_layer_type: rel_pos
+    selfattention_layer_type: rel_selfattn
+    activation_type: swish
+    use_cnn_module: true
+    cnn_module_kernel: 15
+    no_subsample: true
+    subsample_by_2: false
+decoder: rnn
+decoder_conf:
+    rnn_type: lstm
+    num_layers: 1
+    hidden_size: 320
+    sampling_probability: 0.0
+    dropout: 0.0
+    att_conf:
+        adim: 320
+required:
+- output_dir
+- token_list
+distributed: true
