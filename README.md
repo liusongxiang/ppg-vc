@@ -15,3 +15,16 @@ PPG-Based Voice Conversion
 
 # TODO
 - [ ] Upload pretraind models.
+
+## Citations
+```
+@ARTICLE{liu2021any,
+  author={Liu, Songxiang and Cao, Yuewen and Wang, Disong and Wu, Xixin and Liu, Xunying and Meng, Helen},
+  journal={IEEE/ACM Transactions on Audio, Speech, and Language Processing}, 
+  title={Any-to-Many Voice Conversion With Location-Relative Sequence-to-Sequence Modeling}, 
+  year={2021},
+  volume={29},
+  number={},
+  pages={1717-1728},
+  doi={10.1109/TASLP.2021.3076867}
+}
