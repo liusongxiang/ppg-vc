@@ -3,20 +3,23 @@ Phonetic PosteriorGram (PPG)-Based Voice Conversion (VC)
 
 This repo implements different kinds of PPG-based VC models. The PPG model provided in `conformer_ppg_model` is based on Hybrid CTC-Attention phoneme recognizer, trained with LibriSpeech (960hrs). This repo uses HifiGAN as the vocoder model.
 
+## Highlights
+- Any-to-many VC
+- Any-to-Any VC (a.k.a. few/one-shot VC)
 
-# How to use
-## Data preprocessing
+## How to use
+### Data preprocessing
 - Please run `1_compute_ctc_att_bnf.py` to compute PPG features.
 - Please run `2_compute_f0.py` to compute fundamental frequency.
 - Please run `3_compute_spk_dvecs.py` to compute speaker d-vectors.
 
-## Training
+### Training
 - Please refer to `run.sh`
 
-## Conversion
+### Conversion
 - Plesae refer to `test.sh`
 
-# TODO
+## TODO
 - [ ] Upload pretraind models.
 
 ## Citations
