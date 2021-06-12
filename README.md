@@ -1,5 +1,8 @@
 # ppg-vc
-PPG-Based Voice Conversion
+Phonetic PosteriorGram (PPG)-Based Voice Conversion (VC)
+
+This repo implements different kinds of PPG-based VC models. The PPG model provided in `conformer_ppg_model` is based on Hybrid CTC-Attention phoneme recognizer, trained with LibriSpeech (960hrs). This repo uses HifiGAN as the vocoder model.
+
 
 # How to use
 ## Data preprocessing
