@@ -14,4 +14,4 @@ PPG-Based Voice Conversion
 - Plesae refer to `test.sh`
 
 # TODO
-[] Upload pretraind models.
+- [ ] Upload pretraind models.
