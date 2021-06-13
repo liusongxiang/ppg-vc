@@ -34,3 +34,13 @@ This repo implements different kinds of PPG-based VC models. The PPG model provi
   pages={1717-1728},
   doi={10.1109/TASLP.2021.3076867}
 }
+
+@inproceedings{Liu2018,
+  author={Songxiang Liu and Jinghua Zhong and Lifa Sun and Xixin Wu and Xunying Liu and Helen Meng},
+  title={Voice Conversion Across Arbitrary Speakers Based on a Single Target-Speaker Utterance},
+  year=2018,
+  booktitle={Proc. Interspeech 2018},
+  pages={496--500},
+  doi={10.21437/Interspeech.2018-1504},
+  url={http://dx.doi.org/10.21437/Interspeech.2018-1504}
+}
