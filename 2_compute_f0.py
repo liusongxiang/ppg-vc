@@ -13,23 +13,20 @@ from concurrent.futures import ProcessPoolExecutor
 from functools import partial
 
 
-def pyworld_dio_f0(
+def compute_f0(
     wav, 
-    sampling_rate, 
-    f0_floor, 
-    f0_ceil,
-    frame_period_ms,
+    sr,
+    f0_floor=20.0,
+    f0_ceil=600.0,
+    frame_period=10.0
 ):
     wav = wav.astype(np.float64)
-    _f0, t = pyworld.dio(
-        wav, sampling_rate, f0_floor=f0_floor, f0_ceil=f0_ceil,
-        frame_period=frame_period_ms,
-    )
-    f0 = pyworld.stonemask(wav, _f0, t, sampling_rate)
+    f0, timeaxis = pyworld.harvest(
+        wav, sr, frame_period=frame_period, f0_floor=20.0, f0_ceil=600.0)
     return f0.astype(np.float32)
 
 
-def compute_f0s(
+def compute_f0_from_wav(
     wavfile_path,
     sampling_rate,
     f0_floor, 
@@ -43,9 +40,8 @@ def compute_f0s(
     if sr != sampling_rate:
         wav = resampy.resample(wav, sr, sampling_rate)
         sr = sampling_rate
-    # Pyworld Dio f0
-    dio_f0 = pyworld_dio_f0(wav, sr, f0_floor, f0_ceil, frame_period_ms)
-    return dio_f0.astype(np.float32), sr, len(wav)
+    f0 = compute_f0(wav, sr, f0_floor, f0_ceil, frame_period_ms)
+    return f0, sr, len(wav)
 
 
 def process_one(
@@ -58,7 +54,7 @@ def process_one(
     if os.path.isfile(save_fname):
         return
 
-    f0, sr, wav_len = compute_f0s(
+    f0, sr, wav_len = compute_f0_from_wav(
         wav_file_path, args.sampling_rate,
         args.f0_floor, args.f0_ceil, args.frame_period_ms)
     if f0 is None:
@@ -127,7 +123,7 @@ def get_parser():
     )
     parser.add_argument(
         "--num_workers",
-        default=40,
+        default=10,
         type=int
     )
     return parser

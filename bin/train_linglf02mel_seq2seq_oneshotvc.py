@@ -9,11 +9,12 @@ from torch.utils.data import DataLoader
 import numpy as np
 from src.solver import BaseSolver
 from src.data_load import OneshotVcDataset, MultiSpkVcCollate
-from src.rnn_ppg2mel import BiRnnPpg2MelModel
-from src.mel_decoder_mol_encAddlf0 import MelDecoderMOL
+# from src.rnn_ppg2mel import BiRnnPpg2MelModel
+# from src.mel_decoder_mol_encAddlf0 import MelDecoderMOL
 from src.loss import MaskedMSELoss
 from src.optim import Optimizer
 from src.util import human_format, feat_to_fig
+from src import build_model
 
 
 class Solver(BaseSolver):
@@ -120,7 +121,9 @@ class Solver(BaseSolver):
     def set_model(self):
         """Setup model and optimizer"""
         # Model
-        self.model = MelDecoderMOL(
+        print("[INFO] Model name: ", self.config["model_name"])
+        model_class = build_model(self.config["model_name"])
+        self.model = model_class(
             **self.config["model"]
         ).to(self.device)
         # self.load_pretrained_params()

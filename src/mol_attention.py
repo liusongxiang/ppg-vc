@@ -11,8 +11,8 @@ class MOLAttention(nn.Module):
     def __init__(
         self,
         query_dim,
-        r=2,
-        M=5
+        r=1,
+        M=5,
     ):
         """
         Args:
@@ -20,7 +20,10 @@ class MOLAttention(nn.Module):
             M: number of mixtures.
         """
         super().__init__()
-        self.r = r
+        if r < 1:
+            self.r = float(r)
+        else:
+            self.r = int(r)
         self.M = M
         self.score_mask_value = 0.0 # -float("inf")
         self.eps = 1e-5
@@ -40,12 +43,15 @@ class MOLAttention(nn.Module):
         # sigma
         torch.nn.init.constant_(self.query_layer[2].bias[self.M:2*self.M], 1.0)
         # Delta: softplus(1.8545) = 2.0; softplus(3.9815) = 4.0; softplus(0.5413) = 1.0
+        # softplus(-0.432) = 0.5003
         if self.r == 2:
             torch.nn.init.constant_(self.query_layer[2].bias[2*self.M:3*self.M], 1.8545)
         elif self.r == 4:
             torch.nn.init.constant_(self.query_layer[2].bias[2*self.M:3*self.M], 3.9815)
-        else:
+        elif self.r == 1:
             torch.nn.init.constant_(self.query_layer[2].bias[2*self.M:3*self.M], 0.5413)
+        else:
+            torch.nn.init.constant_(self.query_layer[2].bias[2*self.M:3*self.M], -0.432)
 
     
     def init_states(self, memory):

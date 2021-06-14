@@ -32,12 +32,14 @@ class Decoder(nn.Module):
         decoder_rnn_dim,
         prenet_dims,
         num_mixtures,
+        encoder_down_factor=1,
         num_decoder_rnn_layer=1,
         use_stop_tokens=False,
         concat_context_to_last=False,
     ):
         super().__init__()
         self.enc_dim = enc_dim
+        self.encoder_down_factor = encoder_down_factor
         self.num_mels = num_mels
         self.frames_per_step = frames_per_step
         self.attention_rnn_dim = attention_rnn_dim
@@ -59,7 +61,10 @@ class Decoder(nn.Module):
         
         # Attention
         self.attention_layer = MOLAttention(
-            attention_rnn_dim, r=frames_per_step, M=num_mixtures)
+            attention_rnn_dim,
+            r=frames_per_step/encoder_down_factor,
+            M=num_mixtures,
+        )
 
         # Decoder RNN
         self.decoder_rnn_layers = nn.ModuleList()
@@ -275,8 +280,9 @@ class Decoder(nn.Module):
         self.attention_layer.init_states(memory)
         
         mel_outputs, alignments = [], []
-        max_decoder_step = memory.size(1) // self.frames_per_step  # NOTE(sx): heuristic
-        min_decoder_step = memory.size(1) // self.frames_per_step - 5
+        # NOTE(sx): heuristic 
+        max_decoder_step = memory.size(1)*self.encoder_down_factor//self.frames_per_step 
+        min_decoder_step = memory.size(1)*self.encoder_down_factor // self.frames_per_step - 5
         while True:
             decoder_input = self.prenet(decoder_input)
 
@@ -325,8 +331,9 @@ class Decoder(nn.Module):
         
         mel_outputs, alignments = [], []
         stop_outputs = []
-        max_decoder_step = memory.size(1) // self.frames_per_step  # NOTE(sx): heuristic
-        min_decoder_step = memory.size(1) // self.frames_per_step - 5
+        # NOTE(sx): heuristic 
+        max_decoder_step = memory.size(1)*self.encoder_down_factor//self.frames_per_step 
+        min_decoder_step = memory.size(1)*self.encoder_down_factor // self.frames_per_step - 5
         while True:
             decoder_input = self.prenet(decoder_input)
 

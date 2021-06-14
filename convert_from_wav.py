@@ -22,14 +22,7 @@ from vocoders.hifigan_model import load_hifigan_generator
 
 from speaker_encoder.voice_encoder import SpeakerEncoder
 from speaker_encoder.audio import preprocess_wav
-
-
-##### TMP USE ######
-with open("./f0s.scp", 'r') as f:
-    fid_set = set([l.split()[0][4:] for l in f if "arctic" in l])
-    print(len(fid_set))
-    # print(fid_set)
-    # sys.exit()
+from src import build_model
 
 
 def compute_spk_dvec(
@@ -89,21 +82,10 @@ def get_converted_lf0uv(
 
 
 def build_ppg2mel_model(model_config, model_file, device):
-    if model_config["model_name"] == "seq2seqmol": 
-        ppg2mel_model = MelDecoderMOL(
-            **model_config["model"]
-        ).to(device)
-    elif model_config["model_name"] == "seq2seqlsa":
-        ppg2mel_model = MelDecoderLSA(
-            **model_config["model"]
-        ).to(device)
-    elif model_config["model_name"] == "bilstm":
-        ppg2mel_model = BiRnnPpg2MelModel(
-            **model_config["model"]
-        ).to(device)
-    else:
-        model_name = model_config["model_name"]
-        raise ValueError(f"Unknown model name: {model_name}.")
+    model_class = build_model(model_config["model_name"])
+    ppg2mel_model = model_class(
+        **model_config["model"]
+    ).to(device)
     ckpt = torch.load(model_file, map_location=device)
     ppg2mel_model.load_state_dict(ckpt["model"])
     ppg2mel_model.eval()
@@ -138,14 +120,6 @@ def convert(args):
     ref_lf0_mean, ref_lf0_std = compute_mean_std(f02lf0(compute_f0(ref_wav)))
     
     source_file_list = sorted(glob.glob(f"{args.src_wav_dir}/*.wav"))
-    ##### TEMP USE #####
-    new_source_file_list = []
-    for src_f in source_file_list:
-        fid = os.path.basename(src_f)[:-4]
-        if fid in fid_set:
-            new_source_file_list.append(src_f)
-    source_file_list = new_source_file_list[:10]
-    ####################
     print(f"Number of source utterances: {len(source_file_list)}.")
     
     total_rtf = 0.0
