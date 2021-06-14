@@ -132,15 +132,12 @@ def convert(args):
         ppg = ppg_model(src_wav_tensor, src_wav_lengths)
 
         lf0_uv = get_converted_lf0uv(src_wav, ref_lf0_mean, ref_lf0_std, convert=True)
-        print("ppg shape: ", ppg.shape)
-        print("lf0_uv shape: ", lf0_uv.shape)
         min_len = min(ppg.shape[1], len(lf0_uv))
 
         ppg = ppg[:, :min_len]
         lf0_uv = lf0_uv[:min_len]
         
         start = time.time()
-        print(ppg.shape, lf0_uv.shape) 
         if isinstance(ppg2mel_model, BiRnnPpg2MelModel):
             ppg_length = torch.LongTensor([ppg.shape[1]]).to(device)
             logf0_uv=torch.from_numpy(lf0_uv).unsqueeze(0).float().to(device)
@@ -152,7 +149,6 @@ def convert(args):
                 spembs=ref_spk_dvec,
                 use_stop_tokens=True,
             )
-        print(mel_pred.shape)
         if ppg2mel_config.data.min_max_norm_mel:
             mel_min = ppg2mel_config.data.mel_min
             mel_max = ppg2mel_config.data.mel_max

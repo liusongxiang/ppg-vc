@@ -1,7 +1,7 @@
 # ppg-vc
 Phonetic PosteriorGram (PPG)-Based Voice Conversion (VC)
 
-This repo implements different kinds of PPG-based VC models.
+This repo implements different kinds of PPG-based VC models. [Pretrained models](https://drive.google.com/drive/folders/1JeFntg2ax9gX4POFbQwcS85eC9hyQ6W6?usp=sharing). More models are on the way.
 
 Notes:
 
