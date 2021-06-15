@@ -1,10 +1,9 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-# from nnsp.ctc_seq2seq_ppg_vc.mol_attention import MOLAttention
-from nnsp.ctc_seq2seq_ppg_vc.lsa_attention import LocationSensitiveAttention
-from nnsp.layers.basic_layers import Linear, Conv1d
-from nnsp.utils.vc_utils import get_mask_from_lengths
+from .lsa_attention import LocationSensitiveAttention
+from .basic_layers import Linear, Conv1d
+from .vc_utils import get_mask_from_lengths
 
 
 class DecoderPrenet(nn.Module):
