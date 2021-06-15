@@ -1,3 +1,4 @@
+. ./path.sh || exit 1;
 export CUDA_VISIBLE_DEVICES=7
 
 stage=1

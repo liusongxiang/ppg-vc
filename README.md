@@ -7,14 +7,27 @@ Notes:
 
 - The PPG model provided in `conformer_ppg_model` is based on Hybrid CTC-Attention phoneme recognizer, trained with LibriSpeech (960hrs). PPGs have frame-shift of 10 ms, with dimensionality of 144. This modelis very much similar to the one used in [this paper](https://arxiv.org/pdf/2011.05731v2.pdf).
 
-- This repo uses [HifiGAN V1](https://github.com/jik876/hifi-gan) as the vocoder model, sampling rate of synthesized audio is 24kHz.
+- This repo uses [Hifi-GAN V1](https://github.com/jik876/hifi-gan) as the vocoder model, sampling rate of synthesized audio is 24kHz.
 
 ## Highlights
 - Any-to-many VC
 - Any-to-Any VC (a.k.a. few/one-shot VC)
 
 ## How to use
+### Setup with virtualenv
+```
+$ cd tools
+$ make
+```
+
+Note: If you want to specify Python version, CUDA version or PyTorch version, please run for example:
+
+```
+$ make PYTHON=3.7 CUDA_VERSION=10.1 PYTORCH_VERSION=1.6
+```
+
 ### Data preprocessing
+Activate the virtual env py `source tools/venv/bin/activate`, then:
 - Please run `1_compute_ctc_att_bnf.py` to compute PPG features.
 - Please run `2_compute_f0.py` to compute fundamental frequency.
 - Please run `3_compute_spk_dvecs.py` to compute speaker d-vectors.
