@@ -25,3 +25,4 @@ log
 conf/tuning
 ckpt
 vc_gen_wavs
+tools/venv
