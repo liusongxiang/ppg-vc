@@ -12,7 +12,7 @@ LRELU_SLOPE = 0.1
 
 
 DEFAULT_CONFIG=os.path.dirname(__file__) + "/vctk_24k10ms/config.json"
-DEFAULT_CKPT=os.path.dirname(__file__) + "/vctk_24k10ms/g_02185000"
+DEFAULT_CKPT=os.path.dirname(__file__) + "/vctk_24k10ms/g_02830000"
 
 
 def load_hifigan_generator(device):

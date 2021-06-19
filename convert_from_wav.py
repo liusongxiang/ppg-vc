@@ -149,10 +149,10 @@ def convert(args):
                 spembs=ref_spk_dvec,
                 use_stop_tokens=True,
             )
-        if ppg2mel_config.data.min_max_norm_mel:
-            mel_min = ppg2mel_config.data.mel_min
-            mel_max = ppg2mel_config.data.mel_max
-            mel_pred = (mel_pred + 4.0) / 8.0 * (mel_max - mel_min) + mel_min
+        # if ppg2mel_config.data.min_max_norm_mel:
+            # mel_min = ppg2mel_config.data.mel_min
+            # mel_max = ppg2mel_config.data.mel_max
+            # mel_pred = (mel_pred + 4.0) / 8.0 * (mel_max - mel_min) + mel_min
         src_fid = os.path.basename(src_wav_path)[:-4]
         wav_fname = f"{output_dir}/vc_{src_fid}_ref_{ref_fid}_step{step}.wav"
         mel_len = mel_pred.shape[0]
