@@ -1,7 +1,13 @@
-# ppg-vc
-Phonetic PosteriorGram (PPG)-Based Voice Conversion (VC)
+# One-shot Phonetic PosteriorGram (PPG)-Based Voice Conversion (PPG-VC): Any-to-Many Voice Conversion with Location-Relative Sequence-to-Sequence Modeling (TASLP 2021)
 
-This repo implements different kinds of PPG-based VC models. [Pretrained models](https://drive.google.com/drive/folders/1JeFntg2ax9gX4POFbQwcS85eC9hyQ6W6?usp=sharing). More models are on the way.
+### [Paper](https://arxiv.org/abs/2009.02725v3) | [Pre-trained models](https://drive.google.com/drive/folders/1JeFntg2ax9gX4POFbQwcS85eC9hyQ6W6?usp=sharing) | [Paper Demo](https://liusongxiang.github.io/BNE-Seq2SeqMoL-VC/)
+
+This paper proposes an any-to-many location-relative, sequence-to-sequence (seq2seq) based, non-parallel voice conversion approach. In this approach, we combine a bottle-neck feature extractor (BNE) with a seq2seq based synthesis module. During the training stage, an encoder-decoder based hybrid connectionist-temporal-classification-attention (CTC-attention) phoneme recognizer is trained, whose encoder has a bottle-neck layer. A BNE is obtained from the phoneme recognizer and is utilized to extract speaker-independent, dense and rich linguistic representations from spectral features. Then a multi-speaker location-relative attention based seq2seq synthesis model is trained to reconstruct spectral features from the bottle-neck features, conditioning on speaker representations for speaker identity control in the generated speech. To mitigate the difficulties of using seq2seq based models to align long sequences, we down-sample the input spectral feature along the temporal dimension and equip the synthesis model with a discretized mixture of logistic (MoL) attention mechanism. Since the phoneme recognizer is trained with large speech recognition data corpus, the proposed approach can conduct any-to-many voice conversion. Objective and subjective evaluations shows that the proposed any-to-many approach has superior voice conversion performance in terms of both naturalness and speaker similarity. Ablation studies are conducted to confirm the effectiveness of feature selection and model design strategies in the proposed approach. The proposed VC approach can readily be extended to support any-to-any VC (also known as one/few-shot VC), and achieve high performance according to objective and subjective evaluations.
+
+
+
+
+This repo implements an updated version of PPG-based VC models.
 
 Notes:
 
@@ -9,9 +15,11 @@ Notes:
 
 - This repo uses [Hifi-GAN V1](https://github.com/jik876/hifi-gan) as the vocoder model, sampling rate of synthesized audio is 24kHz.
 
-## Highlights
-- Any-to-many VC
-- Any-to-Any VC (a.k.a. few/one-shot VC)
+## Updates!
+- We provide an audio sample uttered by Barack Obama ([link](https://drive.google.com/file/d/10Cgtw14UtVf2jTqKtR-C1y5bZqq6Ue7U/view?usp=sharing)), you can convert any voice into Obama's voice using this sample as reference. Please have a try!
+- BNE-Seq2seqMoL One-shot VC model are uploaded ([link](https://drive.google.com/drive/folders/1JeFntg2ax9gX4POFbQwcS85eC9hyQ6W6?usp=sharing))
+- BiLSTM-based One-shot VC model are uploaded ([link](https://drive.google.com/drive/folders/1JeFntg2ax9gX4POFbQwcS85eC9hyQ6W6?usp=sharing))
+
 
 ## How to use
 ### Setup with virtualenv
@@ -26,6 +34,17 @@ Note: If you want to specify Python version, CUDA version or PyTorch version, pl
 $ make PYTHON=3.7 CUDA_VERSION=10.1 PYTORCH_VERSION=1.6
 ```
 
+### Conversion with a pretrained model
+1. Download a model from [here](https://drive.google.com/drive/folders/1JeFntg2ax9gX4POFbQwcS85eC9hyQ6W6?usp=sharing), we recommend to first try the model `bneSeq2seqMoL-vctk-libritts460-oneshot`. Put the config file and the checkpoint file in a folder `<model_dir>`.
+2. Prepare a source wav directory `<source_wav_dur>`, where the wavs inside are what you want to convert.
+3. Prepare a reference audio sample (i.e., the target voice you want convert to) `<ref_wavpath>`.
+4. Run `test.sh` as:
+```
+sh test.sh <model_dir>/seq2seq_mol_ppg2mel_vctk_libri_oneshotvc_r4_normMel_v2.yaml <model_dir>/best_loss_step_304000.pth \
+  <source_wav_dir> <ref_wavpath>
+```
+The converted wavs are saved in the folder `vc_gen_wavs`.
+
 ### Data preprocessing
 Activate the virtual env py `source tools/venv/bin/activate`, then:
 - Please run `1_compute_ctc_att_bnf.py` to compute PPG features.
@@ -35,13 +54,8 @@ Activate the virtual env py `source tools/venv/bin/activate`, then:
 ### Training
 - Please refer to `run.sh`
 
-### Conversion
-- Plesae refer to `test.sh`
-
-## TODO
-- [ ] Upload pretraind models.
-
 ## Citations
+If you use this repo for your research, please consider of citing the following related papers.
 ```
 @ARTICLE{liu2021any,
   author={Liu, Songxiang and Cao, Yuewen and Wang, Disong and Wu, Xixin and Liu, Xunying and Meng, Helen},
