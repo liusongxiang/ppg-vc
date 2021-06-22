@@ -1,5 +1,5 @@
 import os, sys
-sys.path.append('/home/shaunxliu/projects/nnsp')
+# sys.path.append('/home/shaunxliu/projects/nnsp')
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
