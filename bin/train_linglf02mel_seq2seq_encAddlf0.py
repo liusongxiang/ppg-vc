@@ -1,5 +1,4 @@
 import os, sys
-sys.path.append('/home/shaunxliu/projects/nnsp')
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -10,8 +9,8 @@ import numpy as np
 from .solver import BaseSolver
 from src.data_load import MultiSpkVcDataset, MultiSpkVcCollate
 from src.rnn_ppg2mel import BiRnnPpg2MelModel
-from nnsp.ctc_seq2seq_ppg_vc.mel_decoder_mol_encAddlf0 import MelDecoderMOL
-from nnsp.ctc_seq2seq_ppg_vc.nnsp_model import MaskedMSELoss
+from src.mel_decoder_mol_encAddlf0 import MelDecoderMOL
+from src.loss import MaskedMSELoss
 from src.optim import Optimizer
 from src.util import human_format, feat_to_fig
 
