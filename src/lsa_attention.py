@@ -1,7 +1,8 @@
 import torch
 from torch import nn
 from torch.nn import functional as F
-from nnsp.layers.basic_layers import Conv1d, Linear
+from .basic_layers import Linear, Conv1d
+
 
 
 class LocationLayer(nn.Module):
